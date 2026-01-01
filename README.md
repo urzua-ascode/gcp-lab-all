@@ -4,6 +4,8 @@ Este proyecto contiene un script de automatización robusto para desplegar infra
 
 ## 🏗️ Arquitectura del Proyecto
 
+![GCP Architecture Diagram](docs/images/architecture.png)
+
 ### Diagrama de Infraestructura GCP
 
 ```mermaid
