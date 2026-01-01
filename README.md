@@ -1,7 +1,7 @@
 # GCP Infrastructure Setup - Guía de Uso
 
 Este proyecto contiene un script de automatización robusto para desplegar infraestructura en Google Cloud Platform usando Terraform y Kubernetes.
-cmermaid
+```mermaid
 graph TB
     subgraph Internet [Internet Pública]
         User((Usuario Final))
