@@ -1,6 +1,67 @@
 # GCP Infrastructure Setup - Guía de Uso
 
 Este proyecto contiene un script de automatización robusto para desplegar infraestructura en Google Cloud Platform usando Terraform y Kubernetes.
+```mermaid
+graph TB
+    subgraph Internet [Internet Pública]
+        User((Usuario Final))
+        GH[GitHub Actions CI/CD]
+    end
+
+    subgraph GCP_Org [Google Cloud Organization]
+        
+        subgraph Host_Project [Host Project: Networking & Security]
+            LB[Cloud Load Balancing]
+            CA[Cloud Armor - WAF]
+            SVPC[Shared VPC - enterprise-net]
+            
+            LB --> CA
+            CA --> SVPC
+        end
+
+        subgraph Service_Project_Prod [Service Project: Workloads]
+            direction TB
+            
+            subgraph GKE_Cluster [GKE Autopilot - Cluster]
+                direction LR
+                Ingress[Nginx Ingress]
+                API[API Gateway Microservice]
+                Worker[Background Worker]
+                
+                Ingress --> API
+                API --> Worker
+            end
+
+            subgraph Data_Layer [Data & Secrets]
+                SQL[(Cloud SQL - PostgreSQL)]
+                SM[Secret Manager]
+            end
+
+            API -.-> |Workload Identity| SM
+            API --> |Private IP| SQL
+        end
+
+        subgraph Service_Project_Edge [Service Project: Serverless]
+            PS[Cloud Pub/Sub]
+            CR[Cloud Run - Logic]
+            
+            Worker --> |Publish Event| PS
+            PS --> |Push Trigger| CR
+            CR --> |Update Status| SQL
+        end
+    end
+
+    %% Flujos de Conectividad
+    User --> |HTTPS/TLS 1.3| LB
+    GH --> |OIDC / Workload Identity| GCP_Org
+    GH --> |Push Image| GCR[Artifact Registry]
+    GCR --> GKE_Cluster
+
+    %% Estilos
+    style Host_Project fill:#e1f5fe,stroke:#01579b
+    style Service_Project_Prod fill:#f1f8e9,stroke:#33691e
+    style Service_Project_Edge fill:#fff3e0,stroke:#e65100
+    style GKE_Cluster fill:#ffffff,stroke:#2e7d32,stroke-dasharray: 5 5
 
 ## 📋 Requisitos Previos
 
