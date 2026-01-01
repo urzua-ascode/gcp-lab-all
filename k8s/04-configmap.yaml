@@ -1,0 +1,11 @@
+# Example ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: demo-app
+data:
+  environment: "development"
+  log_level: "info"
+  app_name: "Demo Application"
+  # Add your configuration here

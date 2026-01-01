@@ -1,0 +1,8 @@
+# Example Kubernetes Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo-app
+  labels:
+    environment: dev
+    managed-by: terraform
